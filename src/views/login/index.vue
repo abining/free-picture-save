@@ -4,7 +4,7 @@
     <div class="login-right">
       <div class="login-form">
         <div class="title-container">
-          <h1>管理平台</h1>
+          <h1>pic管理平台</h1>
         </div>
         <el-form :model="form" :rules="rules" ref="loginFormRef" @submit.prevent>
           <el-form-item prop="token">
