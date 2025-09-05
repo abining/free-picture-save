@@ -34,6 +34,8 @@ pnpm build
 
 所有设计均基于官方 API 文档：[https://picui.cn/page/api-docs.html](https://picui.cn/page/api-docs.html)
 
+**本项目代码可查**：绝对没有盗用token的api的行为，且只与[picui.cn](https://picui.cn/api/v1)进行交互，可以放心使用。
+
 ## 登录界面
 
 ![1757065378765](image/README/1757065378765.png)
