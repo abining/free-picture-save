@@ -1,0 +1,1220 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "精密智巡管理端",
+        "description": "精密智巡管理端",
+        "termsOfService": "http://localhost:8080/jmzx-mgr/doc.html",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://20.20.136.37:8080",
+            "description": "Inferred Url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "健康检测",
+            "description": "Health Controller"
+        },
+        {
+            "name": "客户管理",
+            "description": "Customer Controller"
+        },
+        {
+            "name": "用户登录登出相关类",
+            "description": "Login Controller"
+        },
+        {
+            "name": "用户相关类",
+            "description": "User Controller"
+        }
+    ],
+    "paths": {
+        "/jmzx-mgr/customerMgr/addCustomer": {
+            "post": {
+                "tags": [
+                    "客户管理"
+                ],
+                "summary": "addCustomer",
+                "operationId": "addCustomerUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JmzxCustomerPo"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/customerMgr/queryAllAreaOption": {
+            "post": {
+                "tags": [
+                    "客户管理"
+                ],
+                "summary": "queryAllAreaOption",
+                "operationId": "queryAllAreaOptionUsingPOST",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«List«JmzxProvVo»»"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/customerMgr/queryCustomers": {
+            "post": {
+                "tags": [
+                    "客户管理"
+                ],
+                "summary": "queryCustomerListByPage",
+                "operationId": "queryCustomerListByPageUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JmzxCustomerDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«PageBean«JmzxCustomerPo»»"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/customerMgr/queryUserArea": {
+            "post": {
+                "tags": [
+                    "客户管理"
+                ],
+                "summary": "queryUserArea",
+                "operationId": "queryUserAreaUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserAreaDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«List«JmzxAreaConfigPo»»"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/customerMgr/updateUserArea": {
+            "post": {
+                "tags": [
+                    "客户管理"
+                ],
+                "summary": "updateUserArea",
+                "operationId": "updateUserAreaUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserAreaDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/health/error": {
+            "get": {
+                "tags": [
+                    "健康检测"
+                ],
+                "summary": "error",
+                "operationId": "errorUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«string»"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/health/health": {
+            "get": {
+                "tags": [
+                    "健康检测"
+                ],
+                "summary": "health",
+                "operationId": "healthUsingGET",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«string»"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/login/checkSmsCode": {
+            "post": {
+                "tags": [
+                    "用户登录登出相关类"
+                ],
+                "summary": "校验验证码",
+                "operationId": "checkPhoneCodeUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLoginDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«JmzxUserVo»"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/login/sendSmsCode": {
+            "post": {
+                "tags": [
+                    "用户登录登出相关类"
+                ],
+                "summary": "发送验证码",
+                "operationId": "sendCodeUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLoginDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/usermgr/addUser": {
+            "post": {
+                "tags": [
+                    "用户相关类"
+                ],
+                "summary": "用户新增接口",
+                "operationId": "addUserUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JmzxUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/usermgr/queryUserList": {
+            "get": {
+                "tags": [
+                    "用户相关类"
+                ],
+                "summary": "用户列表查询接口",
+                "operationId": "queryUserListUsingGET",
+                "parameters": [
+                    {
+                        "name": "effectDate",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "expireDate",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "is_lock",
+                        "in": "query",
+                        "description": "是否锁定。1：未锁定；-1：锁定",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "lockReason",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "mulitLogin",
+                        "in": "query",
+                        "description": "多点登录",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "remark",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "用户状态。1:正常；-1：失效",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "userCity",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userPwd",
+                        "in": "query",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "userType",
+                        "in": "query",
+                        "description": "用户类型。1：正式；2：试用；3：内部",
+                        "required": false,
+                        "style": "form",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R«PageBean«JmzxUserPo»»"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/jmzx-mgr/usermgr/updateUser": {
+            "post": {
+                "tags": [
+                    "用户相关类"
+                ],
+                "summary": "用户修改接口",
+                "operationId": "updateUserUsingPOST",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JmzxUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/R"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "JmzxAreaConfigPo": {
+                "title": "JmzxAreaConfigPo",
+                "type": "object",
+                "properties": {
+                    "areaLevel": {
+                        "type": "string",
+                        "description": "层级"
+                    },
+                    "hasChild": {
+                        "type": "integer",
+                        "description": "是否有下级区域",
+                        "format": "int32"
+                    },
+                    "id": {
+                        "type": "string",
+                        "description": "编号"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "名称"
+                    },
+                    "selectable": {
+                        "type": "integer",
+                        "description": "是否可选",
+                        "format": "int32"
+                    },
+                    "upId": {
+                        "type": "string",
+                        "description": "上级编号"
+                    }
+                }
+            },
+            "JmzxCityVo": {
+                "title": "JmzxCityVo",
+                "type": "object",
+                "properties": {
+                    "cityId": {
+                        "type": "string",
+                        "description": "地市编号"
+                    },
+                    "cityName": {
+                        "type": "string",
+                        "description": "地市名称"
+                    },
+                    "countyList": {
+                        "type": "array",
+                        "description": "区县列表",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxCountyVo"
+                        }
+                    },
+                    "hasChild": {
+                        "type": "integer",
+                        "description": "是否有子节点",
+                        "format": "int32"
+                    },
+                    "selectable": {
+                        "type": "integer",
+                        "description": "是否可选",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxCountyVo": {
+                "title": "JmzxCountyVo",
+                "type": "object",
+                "properties": {
+                    "countyId": {
+                        "type": "string",
+                        "description": "区县编号"
+                    },
+                    "countyName": {
+                        "type": "string",
+                        "description": "区县名称"
+                    },
+                    "hasChild": {
+                        "type": "integer",
+                        "description": "是否有子节点",
+                        "format": "int32"
+                    },
+                    "selectable": {
+                        "type": "integer",
+                        "description": "是否可选",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxCustomerDto": {
+                "title": "JmzxCustomerDto",
+                "type": "object",
+                "properties": {
+                    "cityId": {
+                        "type": "string",
+                        "description": "归属地市编号"
+                    },
+                    "customName": {
+                        "type": "string",
+                        "description": "客户名称"
+                    },
+                    "e55": {
+                        "type": "string",
+                        "description": "e55计费号"
+                    },
+                    "effectDate": {
+                        "type": "string",
+                        "description": "生效日期",
+                        "format": "date-time"
+                    },
+                    "expireDate": {
+                        "type": "string",
+                        "description": "失效日期",
+                        "format": "date-time"
+                    },
+                    "pageIndex": {
+                        "type": "integer",
+                        "description": "第几页，默认为1",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "description": "每页记录数，默认为10",
+                        "format": "int32"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "用户状态。1:正常；-1：失效",
+                        "format": "int32"
+                    }
+                },
+                "description": "客户清单查询入参"
+            },
+            "JmzxCustomerPo": {
+                "title": "JmzxCustomerPo",
+                "type": "object",
+                "properties": {
+                    "cityId": {
+                        "type": "string",
+                        "description": "归属地市编号"
+                    },
+                    "customName": {
+                        "type": "string",
+                        "description": "客户名称"
+                    },
+                    "e55": {
+                        "type": "string",
+                        "description": "e55计费号"
+                    },
+                    "effectDate": {
+                        "type": "string",
+                        "description": "生效日期",
+                        "format": "date-time"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "邮箱"
+                    },
+                    "expireDate": {
+                        "type": "string",
+                        "description": "失效日期",
+                        "format": "date-time"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "手机号"
+                    },
+                    "prdName": {
+                        "type": "string",
+                        "description": "产品名称"
+                    },
+                    "remark": {
+                        "type": "string",
+                        "description": "备注"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "用户状态。1:正常；-1：失效",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxProvVo": {
+                "title": "JmzxProvVo",
+                "type": "object",
+                "properties": {
+                    "cityList": {
+                        "type": "array",
+                        "description": "地市列表",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxCityVo"
+                        }
+                    },
+                    "hasChild": {
+                        "type": "integer",
+                        "description": "是否有子节点",
+                        "format": "int32"
+                    },
+                    "provId": {
+                        "type": "string",
+                        "description": "省份编号"
+                    },
+                    "provName": {
+                        "type": "string",
+                        "description": "省份名称"
+                    },
+                    "selectable": {
+                        "type": "integer",
+                        "description": "是否可选",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxUserDto": {
+                "title": "JmzxUserDto",
+                "type": "object",
+                "properties": {
+                    "effectDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "expireDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isLock": {
+                        "type": "integer",
+                        "description": "是否锁定。1：未锁定；-1：锁定",
+                        "format": "int32"
+                    },
+                    "lockReason": {
+                        "type": "string"
+                    },
+                    "mulitLogin": {
+                        "type": "integer",
+                        "description": "多点登录",
+                        "format": "int32"
+                    },
+                    "pageNum": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "remark": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "用户状态。1:正常；-1：失效",
+                        "format": "int32"
+                    },
+                    "userCity": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "userName": {
+                        "type": "string"
+                    },
+                    "userPwd": {
+                        "type": "string"
+                    },
+                    "userType": {
+                        "type": "integer",
+                        "description": "用户类型。1：正式；2：试用；3：内部",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxUserPo": {
+                "title": "JmzxUserPo",
+                "type": "object",
+                "properties": {
+                    "effectDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "expireDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isLock": {
+                        "type": "integer",
+                        "description": "是否锁定。1：未锁定；-1：锁定",
+                        "format": "int32"
+                    },
+                    "lockReason": {
+                        "type": "string"
+                    },
+                    "mulitLogin": {
+                        "type": "integer",
+                        "description": "多点登录",
+                        "format": "int32"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "remark": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "用户状态。1:正常；-1：失效",
+                        "format": "int32"
+                    },
+                    "userCity": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "userName": {
+                        "type": "string"
+                    },
+                    "userPwd": {
+                        "type": "string"
+                    },
+                    "userType": {
+                        "type": "integer",
+                        "description": "用户类型。1：正式；2：试用；3：内部",
+                        "format": "int32"
+                    }
+                }
+            },
+            "JmzxUserVo": {
+                "title": "JmzxUserVo",
+                "type": "object",
+                "properties": {
+                    "jwt_token": {
+                        "type": "string",
+                        "description": "登录认证码，后续需凭此码访问服务端的数据"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "用户编号"
+                    },
+                    "userName": {
+                        "type": "string",
+                        "description": "用户姓名"
+                    }
+                }
+            },
+            "PageBean«JmzxCustomerPo»": {
+                "title": "PageBean«JmzxCustomerPo»",
+                "type": "object",
+                "properties": {
+                    "rows": {
+                        "type": "array",
+                        "description": "对象数组",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxCustomerPo"
+                        }
+                    },
+                    "total": {
+                        "type": "integer",
+                        "description": "记录数",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PageBean«JmzxUserPo»": {
+                "title": "PageBean«JmzxUserPo»",
+                "type": "object",
+                "properties": {
+                    "rows": {
+                        "type": "array",
+                        "description": "对象数组",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxUserPo"
+                        }
+                    },
+                    "total": {
+                        "type": "integer",
+                        "description": "记录数",
+                        "format": "int64"
+                    }
+                }
+            },
+            "R": {
+                "title": "R",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "description": "数据对象"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«JmzxUserVo»": {
+                "title": "R«JmzxUserVo»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "description": "数据对象",
+                        "$ref": "#/components/schemas/JmzxUserVo"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«List«JmzxAreaConfigPo»»": {
+                "title": "R«List«JmzxAreaConfigPo»»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "description": "数据对象",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxAreaConfigPo"
+                        }
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«List«JmzxProvVo»»": {
+                "title": "R«List«JmzxProvVo»»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "description": "数据对象",
+                        "items": {
+                            "$ref": "#/components/schemas/JmzxProvVo"
+                        }
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«PageBean«JmzxCustomerPo»»": {
+                "title": "R«PageBean«JmzxCustomerPo»»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "description": "数据对象",
+                        "$ref": "#/components/schemas/PageBean«JmzxCustomerPo»"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«PageBean«JmzxUserPo»»": {
+                "title": "R«PageBean«JmzxUserPo»»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "description": "数据对象",
+                        "$ref": "#/components/schemas/PageBean«JmzxUserPo»"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "R«string»": {
+                "title": "R«string»",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "string",
+                        "description": "数据对象"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "description": "错误信息"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "状态(0成功1错误2未登陆3刷新4重复提交)",
+                        "format": "int32"
+                    }
+                }
+            },
+            "UserAreaDto": {
+                "title": "UserAreaDto",
+                "type": "object",
+                "properties": {
+                    "areaList": {
+                        "type": "array",
+                        "description": "授权的区域id列表",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "e55": {
+                        "type": "string",
+                        "description": "e55计费号"
+                    }
+                },
+                "description": "客户区域授权入参"
+            },
+            "UserLoginDto": {
+                "title": "UserLoginDto",
+                "type": "object",
+                "properties": {
+                    "smsCode": {
+                        "type": "string",
+                        "description": "短信验证码"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "用户编号"
+                    },
+                    "userPwd": {
+                        "type": "string",
+                        "description": "用户密码"
+                    }
+                }
+            }
+        }
+    }
+}
