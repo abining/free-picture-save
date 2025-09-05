@@ -1,8 +1,14 @@
 {
-  "name": "vue3-admin",
+  "name": "pic-admin",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0",
   "type": "module",
+  "author": "abining",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abining/free-picture-save"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "vite --mode development",
     "build": "vite build --mode production",
