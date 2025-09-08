@@ -19,12 +19,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="相册">
-          <el-select v-model="queryParams.album_id" placeholder="请选择" clearable @change="handleSearch" style="width:150px;">
+          <el-select v-model="queryParams.album_id" placeholder="请选择" clearable @change="handleSearch"
+            style="width:150px;">
             <el-option v-for="album in albumList" :key="album.id" :label="album.name" :value="album.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="关键字">
-          <el-input v-model="queryParams.q" placeholder="请输入关键字" clearable @keyup.enter="handleSearch" style="width:150px;"></el-input>
+          <el-input v-model="queryParams.q" placeholder="请输入关键字" clearable @keyup.enter="handleSearch"
+            style="width:150px;"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
@@ -35,38 +37,43 @@
     <!-- 操作区域 & 表格区域 -->
     <el-card shadow="never">
       <div class="toolbar">
-        <el-button type="danger" @click="handleBatchDelete" :disabled="selectedImages.length === 0">批量删除</el-button>
+        <el-button type="danger" @click="handleBatchDelete"
+          :disabled="selectedImages.length === 0">批量删除</el-button><el-button type="primary"
+          @click="handleGenerateScript" :disabled="selectedImages.length === 0">生成下载脚本</el-button>
+        <el-button type="danger" plain @click="handleClearAll">清空图床</el-button>
       </div>
-      <el-table :data="imageList" v-loading="loading" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table :data="imageList" v-loading="loading" style="width: 100%" @selection-change="handleSelectionChange"
+        @row-click="handleRowClick" ref="tableRef" border>
         <el-table-column type="selection" width="55" />
         <el-table-column label="缩略图" width="120">
           <template #default="{ row }">
-            <el-image style="width: 80px; height: 80px" :src="row.links.thumbnail_url" fit="cover" :preview-src-list="[row.links.url]" preview-teleported></el-image>
+            <el-image style="width: 80px; height: 80px" :src="row.links.thumbnail_url" fit="cover"
+              :preview-src-list="[row.links.url]" preview-teleported></el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="size" label="大小" width="120">
-            <template #default="{ row }">
-                {{ formatSize(row.size) }}
-            </template>
+        <el-table-column prop="name" label="名称" show-overflow-tooltip resizable></el-table-column>
+        <el-table-column prop="size" label="大小" width="120" resizable>
+          <template #default="{ row }">
+            {{ formatSize(row.size) }}
+          </template>
         </el-table-column>
-        <el-table-column prop="human_date" label="上传日期" width="180"></el-table-column>
-        <el-table-column label="链接" width="150">
-            <template #default="{ row }">
-                <el-dropdown>
-                    <el-button type="primary" link>
-                        复制链接<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                    </el-button>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item @click="copyToClipboard(row.links.url, 'URL')">URL</el-dropdown-item>
-                            <el-dropdown-item @click="copyToClipboard(row.links.html, 'HTML')">HTML</el-dropdown-item>
-                            <el-dropdown-item @click="copyToClipboard(row.links.bbcode, 'BBCode')">BBCode</el-dropdown-item>
-                            <el-dropdown-item @click="copyToClipboard(row.links.markdown, 'Markdown')">Markdown</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-            </template>
+        <el-table-column prop="human_date" label="上传日期" width="180" resizable></el-table-column>
+        <el-table-column label="链接" width="150" resizable>
+          <template #default="{ row }">
+            <el-dropdown>
+              <el-button type="primary" link>
+                复制链接<el-icon class="el-icon--right"><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="copyToClipboard(row.links.url, 'URL')">URL</el-dropdown-item>
+                  <el-dropdown-item @click="copyToClipboard(row.links.html, 'HTML')">HTML</el-dropdown-item>
+                  <el-dropdown-item @click="copyToClipboard(row.links.bbcode, 'BBCode')">BBCode</el-dropdown-item>
+                  <el-dropdown-item @click="copyToClipboard(row.links.markdown, 'Markdown')">Markdown</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="100" fixed="right">
           <template #default="{ row }">
@@ -80,18 +87,48 @@
       </el-table>
 
       <!-- 分页 -->
-      <el-pagination
-        v-if="pagination.total > 0"
-        class="pagination"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total"
-        v-model:current-page="pagination.current_page"
-        v-model:page-size="pagination.per_page"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      ></el-pagination>
+      <el-pagination v-if="pagination.total > 0" class="pagination" background
+        layout="total, sizes, prev, pager, next, jumper" :total="pagination.total"
+        v-model:current-page="pagination.current_page" v-model:page-size="pagination.per_page"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
     </el-card>
+
+    <!-- 进度条弹窗 -->
+    <el-dialog v-model="progressDialog.visible" :title="progressDialog.title" :close-on-click-modal="false"
+      :show-close="false" width="400px">
+      <div class="progress-content">
+        <el-progress :percentage="progressDialog.percentage" :text-inside="true" stroke-width="20" />
+        <div class="progress-stats">
+          <span>总数: {{ progressDialog.total }}</span>
+          <span>成功: <span style="color: #67c23a;">{{ progressDialog.success }}</span></span>
+          <span>失败: <span style="color: #f56c6c;">{{ progressDialog.failed }}</span></span>
+        </div>
+      </div>
+    </el-dialog>
+
+    <!-- 生成脚本弹窗 -->
+    <el-dialog v-model="scriptDialog.visible" title="批量下载脚本" width="600px">
+      <el-tabs v-model="scriptDialog.activeTab">
+        <el-tab-pane label="cURL (macOS/Linux)" name="curl">
+          <pre class="script-box"><code>{{ scriptDialog.scripts.curl }}</code></pre>
+        </el-tab-pane>
+        <el-tab-pane label="Wget (Linux)" name="wget">
+          <pre class="script-box"><code>{{ scriptDialog.scripts.wget }}</code></pre>
+        </el-tab-pane>
+        <el-tab-pane label="PowerShell (Windows)" name="powershell">
+          <pre class="script-box"><code>{{ scriptDialog.scripts.powershell }}</code></pre>
+        </el-tab-pane>
+        <el-tab-pane label="URL 列表" name="urls">
+          <pre class="script-box"><code>{{ scriptDialog.scripts.urls }}</code></pre>
+        </el-tab-pane>
+      </el-tabs>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="scriptDialog.visible = false">取消</el-button>
+          <el-button type="primary" @click="handleCopyScript">复制脚本</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -100,14 +137,37 @@ import { ref, reactive, onMounted } from 'vue';
 import { getImages, deleteImage, deleteImages } from '@/api/image';
 import { getAlbums } from '@/api/album';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import useClipboard from 'vue-clipboard3'
+import useClipboard from 'vue-clipboard3';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
-const { toClipboard } = useClipboard()
+const { toClipboard } = useClipboard();
 
 const loading = ref(true);
 const imageList = ref([]);
 const albumList = ref([]);
 const selectedImages = ref([]);
+const tableRef = ref(null);
+
+const progressDialog = reactive({
+  visible: false,
+  title: '',
+  percentage: 0,
+  success: 0,
+  failed: 0,
+  total: 0
+});
+
+const scriptDialog = reactive({
+  visible: false,
+  activeTab: 'curl',
+  scripts: {
+    curl: '',
+    wget: '',
+    powershell: '',
+    urls: ''
+  }
+});
 
 const queryParams = reactive({
   page: 1,
@@ -120,7 +180,7 @@ const queryParams = reactive({
 const pagination = reactive({
   total: 0,
   current_page: 1,
-  per_page: 15, 
+  per_page: 15,
 });
 
 const fetchImages = async () => {
@@ -144,32 +204,32 @@ const fetchImages = async () => {
 };
 
 const fetchAlbums = async () => {
-    try {
-        let currentPage = 1;
-        let allAlbums = [];
-        let totalPages = 1;
+  try {
+    let currentPage = 1;
+    let allAlbums = [];
+    let totalPages = 1;
 
-        // Fetch first page to get pagination info
-        const firstPageRes = await getAlbums({ page: currentPage });
-        allAlbums = firstPageRes.data;
-        totalPages = firstPageRes.last_page;
+    // Fetch first page to get pagination info
+    const firstPageRes = await getAlbums({ page: currentPage });
+    allAlbums = firstPageRes.data;
+    totalPages = firstPageRes.last_page;
 
-        // Fetch remaining pages if they exist
-        if (totalPages > 1) {
-            const pagePromises = [];
-            for (let i = 2; i <= totalPages; i++) {
-                pagePromises.push(getAlbums({ page: i }));
-            }
-            const remainingPagesRes = await Promise.all(pagePromises);
-            remainingPagesRes.forEach(res => {
-                allAlbums = allAlbums.concat(res.data);
-            });
-        }
-        
-        albumList.value = allAlbums;
-    } catch (error) {
-        console.error("获取相册列表失败:", error);
+    // Fetch remaining pages if they exist
+    if (totalPages > 1) {
+      const pagePromises = [];
+      for (let i = 2; i <= totalPages; i++) {
+        pagePromises.push(getAlbums({ page: i }));
+      }
+      const remainingPagesRes = await Promise.all(pagePromises);
+      remainingPagesRes.forEach(res => {
+        allAlbums = allAlbums.concat(res.data);
+      });
     }
+
+    albumList.value = allAlbums;
+  } catch (error) {
+    console.error("获取相册列表失败:", error);
+  }
 }
 
 onMounted(() => {
@@ -178,100 +238,255 @@ onMounted(() => {
 });
 
 const handleSearch = () => {
-    pagination.current_page = 1;
-    fetchImages();
+  pagination.current_page = 1;
+  fetchImages();
 };
 
 const handleSelectionChange = (val) => {
-    selectedImages.value = val;
+  selectedImages.value = val;
+};
+
+const handleRowClick = (row) => {
+  if (tableRef.value) {
+    tableRef.value.toggleRowSelection(row);
+  }
 };
 
 const handleBatchDelete = async () => {
-    const keys = selectedImages.value.map(img => img.key);
-    if (keys.length === 0) {
-        ElMessage.warning('请先选择要删除的图片');
-        return;
+  const keys = selectedImages.value.map(img => img.key);
+  if (keys.length === 0) {
+    ElMessage.warning('请先选择要删除的图片');
+    return;
+  }
+
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除选中的 ${keys.length} 张图片吗？`,
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    );
+
+    // 初始化并显示进度条弹窗
+    progressDialog.visible = true;
+    progressDialog.percentage = 0;
+    progressDialog.success = 0;
+    progressDialog.failed = 0;
+    progressDialog.total = keys.length;
+
+    await deleteImages(keys, ({ progress, successCount, failureCount }) => {
+      progressDialog.percentage = progress;
+      progressDialog.success = successCount;
+      progressDialog.failed = failureCount;
+    });
+
+    ElMessage.success('批量删除操作完成');
+
+  } catch (error) {
+    if (error !== 'cancel') {
+      ElMessage.error(error.message || '批量删除操作出现错误');
+      console.error("批量删除失败:", error);
     }
-
-    try {
-        await ElMessageBox.confirm(
-            `确定要删除选中的 ${keys.length} 张图片吗？`,
-            '提示',
-            {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        );
-
-        loading.value = true;
-        await deleteImages(keys);
-        ElMessage.success('批量删除成功');
-        fetchImages(); // Refresh list
-
-    } catch (error) {
-        if (error !== 'cancel') {
-            ElMessage.error(error.message || '批量删除操作失败');
-            console.error("批量删除失败:", error);
-        }
-    } finally {
-        loading.value = false;
-    }
+  } finally {
+    progressDialog.visible = false;
+    fetchImages(); // Refresh list
+  }
 };
 
 const handleDelete = async (key) => {
-    try {
-        await deleteImage(key);
-        ElMessage.success('删除成功');
-        fetchImages(); // 重新加载数据
-    } catch (error) {
-        ElMessage.error('删除失败');
-        console.error("删除图片失败:", error);
-    }
+  try {
+    await deleteImage(key);
+    ElMessage.success('删除成功');
+    fetchImages(); // 重新加载数据
+  } catch (error) {
+    ElMessage.error('删除失败');
+    console.error("删除图片失败:", error);
+  }
 };
 
 const handleSizeChange = (val) => {
-    pagination.per_page = val;
-    fetchImages();
+  pagination.per_page = val;
+  fetchImages();
 };
 
 const handleCurrentChange = (val) => {
-    pagination.current_page = val;
-    fetchImages();
+  pagination.current_page = val;
+  fetchImages();
 };
 
 const formatSize = (sizeInKB) => {
-    const size = parseFloat(sizeInKB);
-    if (isNaN(size)) return '0 KB';
-    if (size < 1024) return `${size.toFixed(2)} KB`;
-    const sizeInMB = size / 1024;
-    return `${sizeInMB.toFixed(2)} MB`;
+  const size = parseFloat(sizeInKB);
+  if (isNaN(size)) return '0 KB';
+  if (size < 1024) return `${size.toFixed(2)} KB`;
+  const sizeInMB = size / 1024;
+  return `${sizeInMB.toFixed(2)} MB`;
 };
 
 const copyToClipboard = async (text, type) => {
-    try {
-        await toClipboard(text);
-        ElMessage.success(`${type} 链接已复制到剪贴板`);
-    } catch (e) {
-        ElMessage.error('复制失败');
-        console.error(e);
+  try {
+    await toClipboard(text);
+    ElMessage.success(`${type} 链接已复制到剪贴板`);
+  } catch (e) {
+    ElMessage.error('复制失败');
+    console.error(e);
+  }
+};
+
+const handleClearAll = async () => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要删除图床中的所有 ${pagination.total} 张图片吗？此操作不可逆！`,
+      '危险操作警告',
+      {
+        confirmButtonText: '确定清空',
+        cancelButtonText: '取消',
+        type: 'error',
+      }
+    );
+
+    loading.value = true;
+
+    // 1. 获取所有图片的 key
+    const allKeys = await fetchAllImageKeys();
+
+    if (allKeys.length === 0) {
+      ElMessage.info('图床中没有图片可清空');
+      loading.value = false;
+      return;
     }
+
+    // 2. 使用带进度条的批量删除
+    progressDialog.visible = true;
+    progressDialog.percentage = 0;
+    progressDialog.success = 0;
+    progressDialog.failed = 0;
+    progressDialog.total = allKeys.length;
+
+    await deleteImages(allKeys, ({ progress, successCount, failureCount }) => {
+      progressDialog.percentage = progress;
+      progressDialog.success = successCount;
+      progressDialog.failed = failureCount;
+    });
+
+    ElMessage.success('图床清空操作完成');
+
+  } catch (error) {
+    if (error !== 'cancel') {
+      ElMessage.error(error.message || '清空操作出现错误');
+      console.error("清空图床失败:", error);
+    }
+  } finally {
+    progressDialog.visible = false;
+    loading.value = false;
+    fetchImages(); // Refresh list
+  }
+};
+
+const fetchAllImageKeys = async () => {
+  const total = pagination.total;
+  if (total === 0) return [];
+
+  const perPage = 40; // Use a larger page size to reduce requests
+  const totalPages = Math.ceil(total / perPage);
+  const allKeys = [];
+
+  const pagePromises = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pagePromises.push(getImages({ page: i, per_page: perPage, ...queryParams}));
+  }
+
+  const results = await Promise.all(pagePromises);
+
+  for (const res of results) {
+    if (res && res.data) {
+      res.data.forEach(img => {
+        allKeys.push(img.key);
+      });
+    }
+  }
+  // debugger
+  console.log(allKeys);
+  // return allKeys.slice(0,5)
+  return allKeys;
+};
+
+
+const handleGenerateScript = () => {
+  if (selectedImages.value.length === 0) {
+    ElMessage.warning('请先选择要生成的图片');
+    return;
+  }
+
+  const scripts = {
+    curl: selectedImages.value.map(img => `curl -O "${img.links.url}"`).join('\n'),
+    wget: selectedImages.value.map(img => `wget "${img.links.url}"`).join('\n'),
+    powershell: selectedImages.value.map(img => `Invoke-WebRequest -Uri "${img.links.url}" -OutFile "${img.name}"`).join('\n'),
+    urls: selectedImages.value.map(img => img.links.url).join('\n')
+  };
+
+  scriptDialog.scripts = scripts;
+  scriptDialog.visible = true;
+};
+
+const handleCopyScript = async () => {
+  const scriptToCopy = scriptDialog.scripts[scriptDialog.activeTab];
+  if (scriptToCopy) {
+    try {
+      await toClipboard(scriptToCopy);
+      ElMessage.success('脚本已成功复制到剪贴板！');
+      scriptDialog.visible = false;
+    } catch (e) {
+      ElMessage.error('复制失败，请手动复制。');
+      console.error('复制脚本失败:', e);
+    }
+  }
 };
 </script>
 
 <style scoped>
 .image-list-container {
+  overflow: scroll;
   padding: 20px;
 }
+
 .filter-card {
   margin-bottom: 20px;
 }
+
 .pagination {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 }
+
 .toolbar {
   margin-bottom: 15px;
+}
+
+.progress-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.progress-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.script-box {
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>

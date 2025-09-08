@@ -30,17 +30,54 @@ export function uploadImage(data) {
   })
 }
 
-// 批量删除图片
-export async function deleteImages(keys) {
-  const promises = keys.map(key => deleteImage(key));
-  const results = await Promise.allSettled(promises);
-  
-  const successCount = results.filter(r => r.status === 'fulfilled').length;
-  const failureCount = results.length - successCount;
+// 批量删除图片，带并发控制和进度回调
+export async function deleteImages(keys, onProgress, concurrency = 5) {
+  let successCount = 0;
+  let failureCount = 0;
+  const total = keys.length;
+  const queue = [...keys]; // Create a mutable copy of keys to act as a queue
+  let inFlight = 0;
+  let processed = 0;
 
-  if (failureCount > 0) {
-      throw new Error(`${successCount} succeeded, ${failureCount} failed.`);
-  }
+  return new Promise((resolve, reject) => {
+    
+    const updateProgress = () => {
+        processed++;
+        if (typeof onProgress === 'function') {
+            const progress = Math.round((processed / total) * 100);
+            onProgress({ progress, successCount, failureCount, total });
+        }
+        
+        if (processed === total) {
+            if (failureCount > 0) {
+                reject(new Error(`删除完成，${successCount} 个成功，${failureCount} 个失败。`));
+            } else {
+                resolve({ successCount, failureCount });
+            }
+        }
+    };
 
-  return { successCount, failureCount };
+    const runNext = () => {
+      while (inFlight < concurrency && queue.length > 0) {
+        const key = queue.shift();
+        inFlight++;
+        
+        deleteImage(key)
+          .then(() => {
+            successCount++;
+          })
+          .catch(error => {
+            console.error(`Failed to delete image ${key}:`, error);
+            failureCount++;
+          })
+          .finally(() => {
+            inFlight--;
+            updateProgress();
+            runNext();
+          });
+      }
+    };
+
+    runNext();
+  });
 }
