@@ -41,6 +41,12 @@ const routes = [
             component: () => import("@/views/images/upload/index.vue"),
             meta: { title: "上传图片" },
           },
+          {
+            path: "lot-upload",
+            name: "ImageLotUpload",
+            component: () => import("@/views/images/lotUpload/index.vue"),
+            meta: { title: "批量上传" },
+          },
         ],
       },
       {

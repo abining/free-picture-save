@@ -81,3 +81,64 @@ export async function deleteImages(keys, onProgress, concurrency = 5) {
     runNext();
   });
 }
+
+// 批量上传图片，带并发控制和进度回调
+export async function uploadImages(files, params, onProgress, concurrency = 3) {
+  let successCount = 0;
+  let failureCount = 0;
+  const total = files.length;
+  const queue = [...files];
+  let inFlight = 0;
+  let processed = 0;
+
+  return new Promise((resolve, reject) => {
+    
+    const updateProgress = () => {
+        processed++;
+        if (typeof onProgress === 'function') {
+            const progress = Math.round((processed / total) * 100);
+            onProgress({ progress, successCount, failureCount, total, processed });
+        }
+        
+        if (processed === total) {
+            if (failureCount > 0) {
+                reject(new Error(`上传完成，${successCount} 个成功，${failureCount} 个失败。`));
+            } else {
+                resolve({ successCount, failureCount });
+            }
+        }
+    };
+
+    const runNext = () => {
+      while (inFlight < concurrency && queue.length > 0) {
+        const file = queue.shift();
+        inFlight++;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        if (params.permission !== null) formData.append('permission', params.permission);
+        if (params.strategy_id) formData.append('strategy_id', params.strategy_id);
+        if (params.album_id) formData.append('album_id', params.album_id);
+        if (params.expired_at) formData.append('expired_at', params.expired_at);
+        
+        uploadImage(formData)
+          .then(() => {
+            successCount++;
+            file.status = 'success';
+          })
+          .catch(error => {
+            console.error(`Failed to upload image ${file.name}:`, error);
+            failureCount++;
+            file.status = 'fail';
+          })
+          .finally(() => {
+            inFlight--;
+            updateProgress();
+            runNext();
+          });
+      }
+    };
+
+    runNext();
+  });
+}
