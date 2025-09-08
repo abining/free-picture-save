@@ -336,81 +336,110 @@ const copyToClipboard = async (text, type) => {
 };
 
 const handleClearAll = async () => {
-  try {
-    await ElMessageBox.confirm(
-      `确定要删除图床中的所有 ${pagination.total} 张图片吗？此操作不可逆！`,
-      '危险操作警告',
-      {
-        confirmButtonText: '确定清空',
-        cancelButtonText: '取消',
-        type: 'error',
-      }
-    );
+    // 1. 动态生成提示信息
+    let confirmationMessage = '';
+    const totalImages = pagination.total;
+    const albumName = queryParams.album_id ? albumList.value.find(a => a.id === queryParams.album_id)?.name : null;
 
-    loading.value = true;
-
-    // 1. 获取所有图片的 key
-    const allKeys = await fetchAllImageKeys();
-
-    if (allKeys.length === 0) {
-      ElMessage.info('图床中没有图片可清空');
-      loading.value = false;
-      return;
+    if (albumName) {
+        confirmationMessage = `此操作将删除相册【${albumName}】下的全部 ${totalImages} 张图片，`;
+    } else if (queryParams.q) {
+        confirmationMessage = `此操作将删除关键字【${queryParams.q}】匹配的全部 ${totalImages} 张图片，`;
+    } else {
+        confirmationMessage = `此操作将删除图床中的全部 ${totalImages} 张图片，`;
     }
 
-    // 2. 使用带进度条的批量删除
-    progressDialog.visible = true;
-    progressDialog.percentage = 0;
-    progressDialog.success = 0;
-    progressDialog.failed = 0;
-    progressDialog.total = allKeys.length;
+    try {
+        // 2. 第一次确认
+        await ElMessageBox.confirm(
+            `${confirmationMessage}此操作不可逆！`,
+            '危险操作警告',
+            {
+                confirmButtonText: '我已知晓，继续',
+                cancelButtonText: '取消',
+                type: 'error',
+            }
+        );
+        
+        // 3. 第二次带输入框的确认
+        const { value } = await ElMessageBox.prompt(
+            '为防止误操作，请输入“确定清空”以确认执行删除操作。',
+            '最终确认',
+            {
+                confirmButtonText: '确认删除',
+                cancelButtonText: '取消',
+                inputPattern: /^确定清空$/,
+                inputErrorMessage: '输入不正确，操作已取消',
+            }
+        );
 
-    await deleteImages(allKeys, ({ progress, successCount, failureCount }) => {
-      progressDialog.percentage = progress;
-      progressDialog.success = successCount;
-      progressDialog.failed = failureCount;
-    });
+        if (value === '确定清空') {
+            loading.value = true;
+            
+            const allKeys = await fetchAllImageKeys();
 
-    ElMessage.success('图床清空操作完成');
+            if (allKeys.length === 0) {
+                ElMessage.info('没有找到可清空的图片');
+                return;
+            }
 
-  } catch (error) {
-    if (error !== 'cancel') {
-      ElMessage.error(error.message || '清空操作出现错误');
-      console.error("清空图床失败:", error);
+            progressDialog.visible = true;
+            progressDialog.percentage = 0;
+            progressDialog.success = 0;
+            progressDialog.failed = 0;
+            progressDialog.total = allKeys.length;
+
+            await deleteImages(allKeys, ({ progress, successCount, failureCount }) => {
+                progressDialog.percentage = progress;
+                progressDialog.success = successCount;
+                progressDialog.failed = failureCount;
+            });
+
+            ElMessage.success('清空操作完成');
+        }
+
+    } catch (error) {
+        if (error !== 'cancel') {
+            ElMessage.info('操作已取消或输入不正确');
+            console.error("清空图床失败或取消:", error);
+        } else {
+            ElMessage.info('操作已取消');
+        }
+    } finally {
+        progressDialog.visible = false;
+        loading.value = false;
+        fetchImages(); // Refresh list
     }
-  } finally {
-    progressDialog.visible = false;
-    loading.value = false;
-    fetchImages(); // Refresh list
-  }
 };
 
 const fetchAllImageKeys = async () => {
-  const total = pagination.total;
-  if (total === 0) return [];
+    const total = pagination.total;
+    if (total === 0) return [];
+    
+    // 使用当前的筛选条件来获取所有 key
+    const params = { ...queryParams, per_page: 40 }; 
+    if (!params.permission) delete params.permission;
+    if (!params.album_id) delete params.album_id;
 
-  const perPage = 40; // Use a larger page size to reduce requests
-  const totalPages = Math.ceil(total / perPage);
-  const allKeys = [];
+    const totalPages = Math.ceil(total / params.per_page);
+    const allKeys = [];
 
-  const pagePromises = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pagePromises.push(getImages({ page: i, per_page: perPage, ...queryParams}));
-  }
-
-  const results = await Promise.all(pagePromises);
-
-  for (const res of results) {
-    if (res && res.data) {
-      res.data.forEach(img => {
-        allKeys.push(img.key);
-      });
+    const pagePromises = [];
+    for (let i = 1; i <= totalPages; i++) {
+        pagePromises.push(getImages({ ...params, page: i }));
     }
-  }
-  // debugger
-  console.log(allKeys);
-  // return allKeys.slice(0,5)
-  return allKeys;
+
+    const results = await Promise.all(pagePromises);
+    
+    for (const res of results) {
+        if (res && res.data) {
+            res.data.forEach(img => {
+                allKeys.push(img.key);
+            });
+        }
+    }
+    
+    return allKeys;
 };
 
 
