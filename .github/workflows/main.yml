@@ -26,11 +26,11 @@ jobs:
 
       # 安装依赖
       - name: 安装依赖
-        run: pnpm install
+        run: npm install
 
       # 打包
       - name: 构建项目
-        run: pnpm run build
+        run: npm run build
 
       # 部署到阿里云服务器
       - name: 部署到阿里云服务器
