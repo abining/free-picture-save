@@ -1,0 +1,50 @@
+name: 部署图床管理后台到阿里云
+
+on:
+  push:
+    branches:
+      - main  # 推送到main分支时触发部署
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 获取代码
+      - name: 迁出代码
+        uses: actions/checkout@v4
+
+      # 安装Node环境
+      - name: 安装Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      # 安装依赖
+      - name: 安装依赖
+        run: pnpm install
+
+      # 打包
+      - name: 构建项目
+        run: pnpm run build
+
+      # 部署到阿里云服务器
+      - name: 部署到阿里云服务器
+        uses: easingthemes/ssh-deploy@main
+        env:
+          # SSH私钥
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SSH_KEY }}
+          # SCP参数
+          ARGS: '-avzr --delete'
+          # 源目录（Vite构建后的dist目录）
+          SOURCE: 'dist/'
+          # 服务器IP
+          REMOTE_HOST: ${{ secrets.ALIYUN_HOST }}
+          # 服务器用户名
+          REMOTE_USER: ${{ secrets.ALIYUN_USER }}
+          # 目标目录
+          TARGET: '${{ secrets.REMOTE_TARGET }}'
+
+      # 部署完成通知
+      - name: 部署完成
+        run: echo "图床管理后台部署完成！"
