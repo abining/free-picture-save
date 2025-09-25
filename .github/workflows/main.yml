@@ -18,7 +18,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
+          cache: 'npm'
+
+      # 安装pnpm（可选，如果项目使用pnpm）
+      - name: 安装pnpm
+        run: npm install -g pnpm
 
       # 安装依赖
       - name: 安装依赖
