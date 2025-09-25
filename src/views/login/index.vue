@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useMainStore } from "@/stores";
 import { ElMessage } from "element-plus";
@@ -47,12 +47,43 @@ const rules = {
   token: [{ required: true, message: "请输入 API Token", trigger: "blur" }],
 };
 
+// 初始化token
+const initToken = () => {
+  // 1. 优先从URL query参数中获取token
+  const urlToken = route.query.token;
+  if (urlToken) {
+    form.token = urlToken;
+    return;
+  }
+
+  // 2. 从localStorage中获取token
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    try {
+      const userData = JSON.parse(storedUser);
+      if (userData && userData.token) {
+        form.token = userData.token;
+        return;
+      }
+    } catch (error) {
+      console.warn("解析localStorage中的用户数据失败:", error);
+    }
+  }
+};
+
+// 组件挂载时初始化token
+onMounted(() => {
+  initToken();
+});
+
 const handleLogin = async () => {
   if (!loginFormRef.value) return;
 
   try {
     await loginFormRef.value.validate();
     loading.value = true;
+    
+    // 调用store的login方法，该方法会自动将token存储到localStorage
     await store.login(form.token);
 
     ElMessage.success("登录成功");

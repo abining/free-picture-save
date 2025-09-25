@@ -47,8 +47,9 @@
             :auto-upload="false"
             :on-change="handleFileChange"
             :file-list="fileList"
-            accept="image/*"
+          
            >
+           <!-- accept="image/*" -->
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           </el-upload>

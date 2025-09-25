@@ -43,11 +43,11 @@
         <el-button type="danger" plain @click="handleClearAll">清空图床</el-button>
       </div>
       <el-table :data="imageList" v-loading="loading" style="width: 100%" @selection-change="handleSelectionChange"
-        @row-click="handleRowClick" ref="tableRef" border>
+        @row-click="handleRowClick" ref="tableRef" border :row-style="{ height: 'auto' }">
         <el-table-column type="selection" width="55" />
         <el-table-column label="缩略图" width="120">
           <template #default="{ row }">
-            <el-image style="width: 80px; height: 80px" :src="row.links.thumbnail_url" fit="cover"
+            <el-image  :src="row.links.thumbnail_url" fit="cover"
               :preview-src-list="[row.links.url]" preview-teleported></el-image>
           </template>
         </el-table-column>
@@ -517,5 +517,19 @@ const handleCopyScript = async () => {
   overflow-y: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+/* 确保表格行高适应缩略图 */
+:deep(.el-table__row) {
+  height: auto !important;
+}
+
+:deep(.el-table__cell) {
+  padding: 12px 0 !important;
+  vertical-align: middle;
+}
+
+:deep(.el-table__body tr) {
+  height: auto !important;
 }
 </style>
