@@ -18,19 +18,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      # 安装pnpm（可选，如果项目使用pnpm）
+      # 安装pnpm
       - name: 安装pnpm
         run: npm install -g pnpm
 
       # 安装依赖
       - name: 安装依赖
-        run: npm install
+        run: pnpm install
 
       # 打包
       - name: 构建项目
-        run: npm run build
+        run: pnpm run build
 
       # 部署到阿里云服务器
       - name: 部署到阿里云服务器
@@ -47,7 +46,7 @@ jobs:
           # 服务器用户名
           REMOTE_USER: ${{ secrets.ALIYUN_USER }}
           # 目标目录
-          TARGET: '${{ secrets.REMOTE_TARGET }}'
+          TARGET: '/var/www/pic-admin'
 
       # 部署完成通知
       - name: 部署完成
