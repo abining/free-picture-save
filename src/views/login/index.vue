@@ -57,7 +57,7 @@ const initToken = () => {
   }
 
   // 2. 从localStorage中获取token
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("token");
   if (storedUser) {
     try {
       const userData = JSON.parse(storedUser);
@@ -85,7 +85,8 @@ const handleLogin = async () => {
     
     // 调用store的login方法，该方法会自动将token存储到localStorage
     await store.login(form.token);
-
+    localStorage.setItem("token", form.token);
+    
     ElMessage.success("登录成功");
     const redirectPath = route.query.redirect || "/";
     router.replace(redirectPath);
