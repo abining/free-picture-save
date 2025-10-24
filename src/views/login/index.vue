@@ -99,6 +99,18 @@
         </div>
       </div>
     </div>
+    
+    <!-- 底部版权信息 -->
+    <div class="footer-section">
+      <div class="footer-content">
+        <p class="copyright text-muted">
+          Copyright &copy; pic管理平台 {{ currentYear }}
+          <br>
+          Powered by <a href="http://abining.fun" target="_blank">Ebin Blog</a> |
+          <a href="https://beian.miit.gov.cn/" target="_blank">赣ICP备2024049236号</a>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -112,6 +124,7 @@ const router = useRouter();
 const route = useRoute();
 const loginFormRef = ref(null);
 const loading = ref(false);
+const currentYear = new Date().getFullYear();
 
 const form = reactive({
   token: "",
@@ -189,8 +202,8 @@ const handleLogin = async () => {
   padding: 15px 20px;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  
-  .login-form {
+
+.login-form {
     max-width: 600px;
     margin: 0 auto;
     padding: 15px 25px;
@@ -199,24 +212,24 @@ const handleLogin = async () => {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     animation: slideDown 0.6s ease-out;
-    
-    .title-container {
-      text-align: center;
+  
+  .title-container {
+    text-align: center;
       margin-bottom: 15px;
 
-      h1 {
-        font-size: 24px;
-        color: #303133;
+    h1 {
+      font-size: 24px;
+      color: #303133;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-      }
     }
+  }
 
-    .svg-container {
-      padding: 6px 5px 6px 15px;
-      color: #409EFF;
-      vertical-align: middle;
-      width: 30px;
-      display: inline-block;
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: #409EFF;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
       transition: all 0.3s ease;
       
       &:hover {
@@ -499,6 +512,41 @@ const handleLogin = async () => {
   }
 }
 
+// 底部版权信息样式
+.footer-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px 20px;
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+  animation: slideInUp 0.8s ease-out 1.2s both;
+  
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    
+    .copyright {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+      
+      a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          color: #764ba2;
+          text-decoration: underline;
+          transform: translateY(-1px);
+        }
+      }
+    }
+  }
+}
+
 // 动画关键帧
 @keyframes slideInLeft {
   0% {
@@ -533,6 +581,17 @@ const handleLogin = async () => {
   }
 }
 
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 // 响应式设计
 @media (max-width: 768px) {
   .main-content {
@@ -559,6 +618,16 @@ const handleLogin = async () => {
     
     .login-form {
       padding: 15px 20px;
+    }
+  }
+  
+  .footer-section {
+    padding: 10px 15px;
+    
+    .footer-content {
+      .copyright {
+        font-size: 12px;
+      }
     }
   }
 }
