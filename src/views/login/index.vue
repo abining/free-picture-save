@@ -1,30 +1,5 @@
 <template>
   <div class="login-container">
-    <!-- 顶部登录区域 -->
-    <div class="top-login-section">
-      <div class="login-form">
-        <div class="title-container">
-          <!-- <h1>pic管理平台</h1> -->
-        </div>
-        <el-form :model="form" :rules="rules" ref="loginFormRef" @submit.prevent>
-          <el-form-item prop="token">
-            <span class="svg-container">
-              <svg-icon icon-class="password" />
-            </span>
-            <el-input
-              v-model="form.token"
-              placeholder="请输入"
-              name="token"
-              @keyup.enter="handleLogin"
-            />
-          </el-form-item>
-          <el-button type="primary" :loading="loading" @click="handleLogin" class="login-button">
-            {{ loading ? "发布中..." : "发布" }}
-          </el-button>
-        </el-form>
-      </div>
-    </div>
-
     <div class="main-content">
       <div class="login-left">
         <!-- 五香土豆食谱内容 -->
@@ -95,6 +70,26 @@
               <span class="emoji">📚</span>
               <span>读了一本好书，收获满满</span>
             </div>
+          </div>
+          
+          <!-- 输入框区域 -->
+          <div class="login-form-section">
+            <el-form :model="form" :rules="rules" ref="loginFormRef" @submit.prevent>
+              <el-form-item prop="token">
+                <span class="svg-container">
+                  <svg-icon icon-class="password" />
+                </span>
+                <el-input
+                  v-model="form.token"
+                  placeholder="请输入"
+                  name="token"
+                  @keyup.enter="handleLogin"
+                />
+              </el-form-item>
+              <el-button type="primary" :loading="loading" @click="handleLogin" class="login-button">
+                {{ loading ? "发布中..." : "发布" }}
+              </el-button>
+            </el-form>
           </div>
         </div>
       </div>
@@ -195,108 +190,6 @@ const handleLogin = async () => {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-// 顶部登录区域样式
-.top-login-section {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 15px 20px;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-
-.login-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: slideDown 0.6s ease-out;
-  
-  .title-container {
-    text-align: center;
-      margin-bottom: 15px;
-
-    h1 {
-      font-size: 24px;
-      color: #303133;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: #409EFF;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: scale(1.1);
-        color: #667eea;
-      }
-    }
-
-    // 输入框动效
-    :deep(.el-input__wrapper) {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 2px solid #e4e7ed;
-      border-radius: 12px;
-      
-      &:hover {
-        border-color: #667eea;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-      }
-      
-      &.is-focus {
-        border-color: #667eea;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
-        animation: inputFocus 0.3s ease-out;
-      }
-    }
-
-    .login-button {
-      width: 100%;
-      margin-top: 15px;
-      border-radius: 25px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border: none;
-      height: 45px;
-      font-size: 16px;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s;
-      }
-      
-      &:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
-        
-        &::before {
-          left: 100%;
-        }
-      }
-      
-      &:active {
-        transform: translateY(-1px) scale(0.98);
-      }
-    }
-  }
-}
 
 // 输入框聚焦动画
 @keyframes inputFocus {
@@ -311,23 +204,12 @@ const handleLogin = async () => {
   }
 }
 
-// 顶部区域滑入动画
-@keyframes slideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .main-content {
   flex: 1;
   display: flex;
   overflow: hidden;
-  padding: 0 10px;
+  padding: 15px 10px;
   gap: 15px;
 }
 
@@ -509,6 +391,90 @@ const handleLogin = async () => {
         }
       }
     }
+    
+    // 输入框区域样式
+    .login-form-section {
+      margin-top: 25px;
+      padding-top: 25px;
+      border-top: 2px solid rgba(102, 126, 234, 0.2);
+      animation: fadeInUp 0.6s ease-out 1.1s both;
+      
+      .svg-container {
+        padding: 6px 5px 6px 15px;
+        color: #409EFF;
+        vertical-align: middle;
+        width: 30px;
+        display: inline-block;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+          color: #667eea;
+        }
+      }
+
+      // 输入框动效
+      :deep(.el-input__wrapper) {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid #e4e7ed;
+        border-radius: 12px;
+        
+        &:hover {
+          border-color: #667eea;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        &.is-focus {
+          border-color: #667eea;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25);
+          animation: inputFocus 0.3s ease-out;
+        }
+      }
+
+      .login-button {
+        width: 100%;
+        margin-top: 15px;
+        border-radius: 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        height: 45px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+        
+        &:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+          
+          &::before {
+            left: 100%;
+          }
+        }
+        
+        &:active {
+          transform: translateY(-1px) scale(0.98);
+        }
+      }
+      
+      :deep(.el-form-item) {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
@@ -611,14 +577,6 @@ const handleLogin = async () => {
   
   .recipe-title {
     font-size: 22px !important;
-  }
-  
-  .top-login-section {
-    padding: 10px 15px;
-    
-    .login-form {
-      padding: 15px 20px;
-    }
   }
   
   .footer-section {
